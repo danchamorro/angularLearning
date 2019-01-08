@@ -8,6 +8,8 @@ import { User } from '../../models/User';
 })
 export class UsersComponent implements OnInit {
   users: User[];
+  enableAdd: true;
+
   constructor() {}
 
   ngOnInit() {
@@ -20,7 +22,8 @@ export class UsersComponent implements OnInit {
           street: '50 Main st',
           city: 'Boston',
           state: 'MA'
-        }
+        },
+        image: 'http://lorempixel.com/600/600/people/3'
       },
       {
         firstName: 'Chris',
@@ -30,7 +33,8 @@ export class UsersComponent implements OnInit {
           street: '05 Main st',
           city: 'Boston',
           state: 'MA'
-        }
+        },
+        image: 'http://lorempixel.com/600/600/people/4'
       },
       {
         firstName: 'Eric',
@@ -40,7 +44,8 @@ export class UsersComponent implements OnInit {
           street: '150 Main st',
           city: 'Boston',
           state: 'MA'
-        }
+        },
+        image: 'http://lorempixel.com/600/600/people/5'
       }
     ];
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { User } from '../../models/User';
 
 @Component({
@@ -8,6 +9,8 @@ import { User } from '../../models/User';
 })
 export class UsersComponent implements OnInit {
   users: User[];
+  showExtended: true;
+  loaded = false;
   enableAdd: true;
 
   constructor() {}
@@ -17,36 +20,45 @@ export class UsersComponent implements OnInit {
       {
         firstName: 'John',
         lastName: 'Doe',
-        age: 30,
+        age: 70,
         address: {
           street: '50 Main st',
           city: 'Boston',
           state: 'MA'
         },
-        image: 'http://lorempixel.com/600/600/people/3'
+        isActive: true,
+        registered: new Date('01/02/2018 08:30:00')
       },
       {
-        firstName: 'Chris',
-        lastName: 'Mike',
-        age: 22,
+        firstName: 'Kevin',
+        lastName: 'Johnson',
+        age: 34,
         address: {
-          street: '05 Main st',
-          city: 'Boston',
+          street: '20 School st',
+          city: 'Lynn',
           state: 'MA'
         },
-        image: 'http://lorempixel.com/600/600/people/4'
+        isActive: false,
+        registered: new Date('03/11/2017 06:20:00')
       },
       {
-        firstName: 'Eric',
-        lastName: 'Smith',
-        age: 40,
+        firstName: 'Karen',
+        lastName: 'Williams',
+        age: 26,
         address: {
-          street: '150 Main st',
-          city: 'Boston',
-          state: 'MA'
+          street: '55 Mill st',
+          city: 'Miami',
+          state: 'FL'
         },
-        image: 'http://lorempixel.com/600/600/people/5'
+        isActive: true,
+        registered: new Date('11/02/2016 10:30:00')
       }
     ];
+
+    this.loaded = true;
+  }
+
+  addUser(user: User) {
+    this.users.push(user);
   }
 }

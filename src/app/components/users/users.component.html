@@ -7,7 +7,7 @@
     <div class="form-group">
       <label>First Name</label>
       <input
-        (copy)="fireEvent($event)"
+        [(ngModel)]="user.firstName"
         type="text"
         class="form-control"
         name="firstName"
@@ -16,29 +16,54 @@
 
     <div class="form-group">
       <label>Last Name</label>
-      <input type="text" class="form-control" name="lastName" />
+      <input
+        [(ngModel)]="user.lastName"
+        type="text"
+        class="form-control"
+        name="lastName"
+      />
     </div>
     <div class="form-group">
-      <label>Age</label> <input type="number" class="form-control" name="age" />
+      <label>Age</label>
+      <input
+        [(ngModel)]="user.age"
+        type="number"
+        class="form-control"
+        name="age"
+      />
     </div>
     <div class="form-group">
       <label>Street Address</label>
-      <input type="text" class="form-control" name="street" />
+      <input
+        [(ngModel)]="user.address.street"
+        type="text"
+        class="form-control"
+        name="street"
+      />
     </div>
     <div class="form-group">
-      <label>City</label> <input type="text" class="form-control" name="city" />
+      <label>City</label>
+      <input
+        [(ngModel)]="user.address.city"
+        type="text"
+        class="form-control"
+        name="city"
+      />
     </div>
     <div class="form-group">
       <label>State</label>
-      <input type="text" class="form-control" name="state" />
+      <input
+        [(ngModel)]="user.address.state"
+        type="text"
+        class="form-control"
+        name="state"
+      />
     </div>
 
     <button
-      (click)="
-        addUser({ firstName: 'Mary', lastName: 'Jackson', isActive: true })
-      "
-      [disabled]="!enableAdd"
-      class="btn btn-block btn-light mb-3"
+      (click)="addUser()"
+      [disabled]="user.firstName == '' || user.lastName == ''"
+      class="btn btn-block btn-info mb-3"
     >
       Add New User
     </button>

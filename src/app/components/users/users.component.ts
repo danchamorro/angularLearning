@@ -8,10 +8,20 @@ import { User } from '../../models/User';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
+  user: User = {
+    firstName: '',
+    lastName: '',
+    age: null,
+    address: {
+      street: '',
+      city: '',
+      state: ''
+    }
+  };
   users: User[];
   showExtended: boolean = true;
   loaded: boolean = false;
-  enableAdd: boolean = true;
+  enableAdd: boolean = false;
   showUserForm: boolean = false;
 
   constructor() {}
@@ -62,8 +72,24 @@ export class UsersComponent implements OnInit {
     this.loaded = true;
   }
 
-  addUser(user: User) {
-    this.users.push(user);
+  addUser() {
+    this.users.unshift(this.user);
+
+    // This will reset form to blank values
+    this.user = {
+      firstName: '',
+      lastName: '',
+      age: null,
+      address: {
+        street: '',
+        city: '',
+        state: ''
+      }
+    };
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
   }
 
   // toggleHide(user: User) {

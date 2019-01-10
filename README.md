@@ -202,3 +202,39 @@ ngOnInit() {
 ```
 
 **_Just make sure to restart the server for changes to take effect._**
+
+## Observables
+
+The way our data is hard coded now does allow our app to function correctly. But that is only because we are getting the data synchronously. Normally we would get our data from a server and that call will be asynchronous. So to handle this we use Observables in Angular. Basically this means our app is constantly watching for data streams.
+
+Let's import it to `data.service`, also we will import `of`. This will allow us to return an array as an Observable so we can mimic asynchronous call.
+
+```typescript
+import { Observable, of } from 'rxjs';
+```
+
+Refactor our `getUsers()`:
+
+```typescript
+// getUsers(): User[] {
+  //   return this.users;
+  // }
+
+  getUsers(): Observable<User[]> {
+    return of(this.users);
+  }
+```
+
+Then is `users.component` we refactor:
+
+```typescript
+ngOnInit() {
+    // this.users = this.dataService.getUsers();
+
+    // this.loaded = true;
+    this.dataService.getUsers().subscribe(users => {
+      this.users = users;
+      this.loaded = true;
+    });
+  }
+```

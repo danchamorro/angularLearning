@@ -24,9 +24,13 @@ export class UsersComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.users = this.dataService.getUsers();
+    // this.users = this.dataService.getUsers();
 
-    this.loaded = true;
+    // this.loaded = true;
+    this.dataService.getUsers().subscribe(users => {
+      this.users = users;
+      this.loaded = true;
+    });
   }
 
   onSubmit({ value, valid }: { value: User; valid: boolean }) {

@@ -332,3 +332,64 @@ Now we can render the posts in our HTML with `*ngFor`.
   </div>
 </div>
 ```
+
+## HTTP Client POST Request
+
+Create a variable for our HTTP Header, then a method to send posts in our Post Services.
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Post } from '../models/Post';
+
+const httpOptions = { <--------------------------
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PostService {
+  postsUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  constructor(private http: HttpClient) {} <----------------------
+
+  getPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.postsUrl);
+  }
+
+  savePost(post: Post): Observable<Post> { <-----------------------
+    return this.http.post<Post>(this.postsUrl, post, httpOptions);
+  }
+}
+```
+
+Now in our Post From Component we create a method to add posts and call savePost() from our Post Service.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { PostService } from '../../services/post.service';
+import { Post } from '../../models/Post';
+
+@Component({
+  selector: 'app-post-form',
+  templateUrl: './post-form.component.html',
+  styleUrls: ['./post-form.component.css']
+})
+export class PostFormComponent implements OnInit {
+  constructor(private postService: PostService) {}
+
+  ngOnInit() {}
+
+  addPost(title, body) {
+    if (!title || !body) {
+      alert('Please add post');
+    } else {
+      this.postService.savePost({ title, body } as Post).subscribe(post => {
+        console.log(post);
+      });
+    }
+  }
+}
+```

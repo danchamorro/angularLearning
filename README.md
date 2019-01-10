@@ -238,3 +238,97 @@ ngOnInit() {
     });
   }
 ```
+
+## HTTP Client Setup & GET Request
+
+- Create a Post component: `ng g c components/posts`
+- Create a Service for your Post: `ng g s services/post`
+- Create a Model for Post
+
+Let's create a model/interface of what are data will be that comes back from [JSON Placeholder](https://jsonplaceholder.typicode.com/)
+
+```typescript
+export interface Post {
+  id: number;
+  title: string;
+  body: string;
+}
+```
+
+Now we want to add `HttpClientModule` into our `app.modules` and add it imports.
+
+```typescript
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    UserComponent,
+    UsersComponent,
+    NavbarComponent,
+    PostsComponent
+  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+```
+
+Now we want to import `HttpClient`, `Observable` and `Post` into our Services. Then ineject the `HttpClient` as a dependency into our constructor and create a method to `getPosts()`.
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Post } from '../models/Post';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PostService {
+  postsUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  constructor(private http: HttpClient) {}
+
+  getPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>(this.postsUrl);
+  }
+}
+```
+
+Now we want to import `Post` and `PostService` into our Post Component. Then `subscribe` to the `observable`.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Post } from '../../models/Post';
+import { PostService } from '../../services/post.service';
+
+@Component({
+  selector: 'app-posts',
+  templateUrl: './posts.component.html',
+  styleUrls: ['./posts.component.css']
+})
+export class PostsComponent implements OnInit {
+  posts: Post[];
+
+  constructor(private postService: PostService) {}
+
+  ngOnInit() {
+    this.postService.getPosts().subscribe(posts => {
+      this.posts = posts;
+    });
+  }
+}
+```
+
+Now we can render the posts in our HTML with `*ngFor`.
+
+```html
+<h2>Posts</h2>
+<div class="card mb-3" *ngFor="let post of posts">
+  <div class="card-body">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.body }}</p>
+  </div>
+</div>
+```

@@ -393,3 +393,89 @@ export class PostFormComponent implements OnInit {
   }
 }
 ```
+
+## Event Emitter & Output
+
+Now since we are grabbing the data from a separate form component, in order to show the data in our post list we need to use `EventEmitter`.
+
+`post-form.component`
+
+```typescript
+import { Component, OnInit, Output } from '@angular/core';
+import { PostService } from '../../services/post.service';
+import { Post } from '../../models/Post';
+import { EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-post-form',
+  templateUrl: './post-form.component.html',
+  styleUrls: ['./post-form.component.css']
+})
+export class PostFormComponent implements OnInit {
+  post: Post;
+  // <--------------------------------------
+  @Output() newPost: EventEmitter<Post> = new EventEmitter();
+  //<--------------------------------------
+
+  constructor(private postService: PostService) {}
+
+  ngOnInit() {}
+
+  //<--------------------------------------
+  addPost(title, body) {
+    if (!title || !body) {
+      alert('Please add post');
+    } else {
+      this.postService.savePost({ title, body } as Post).subscribe(post => {
+        this.newPost.emit(post);
+      });
+    }
+  }
+  //<--------------------------------------
+}
+```
+
+`post.component`
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Post } from '../../models/Post';
+import { PostService } from '../../services/post.service';
+
+@Component({
+  selector: 'app-posts',
+  templateUrl: './posts.component.html',
+  styleUrls: ['./posts.component.css']
+})
+export class PostsComponent implements OnInit {
+  posts: Post[];
+
+  constructor(private postService: PostService) {}
+
+  ngOnInit() {
+    this.postService.getPosts().subscribe(posts => {
+      this.posts = posts;
+    });
+  }
+  //<--------------------------------------
+  onNewPost(post: Post) {
+    this.posts.unshift(post);
+  }
+  //<--------------------------------------
+}
+```
+
+`post-form.html`
+
+```html
+<!--  -->
+<app-post-form (newPost)="onNewPost($event)"></app-post-form>
+<!--  -->
+<h2>Posts</h2>
+<div class="card mb-3" *ngFor="let post of posts">
+  <div class="card-body">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.body }}</p>
+  </div>
+</div>
+```
